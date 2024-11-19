@@ -34,11 +34,13 @@ const Home = () => {
                 setUsersData(newData)
             }
         }catch(error){
+            setDeletingId(null)
             alert(error.message + " unable to delete user")
         }
     }
 
     const handelEditUser = (user) => {
+        setUpdateDataError(false)
         setCreatingNewUser(false)
         const {name,website,email,companyName,id} = user
         console.log(user)
@@ -61,9 +63,11 @@ const Home = () => {
 
     const onUpadteAndSaveChanges = async(e) =>{
         e.preventDefault()
+        
+        
         if (!creatingNewUser){
-            setUpdateDataError("")
             setShowLoaderOnupdate(true)
+            setUpdateDataError("")
             try{
                 const resp = await updateUserDetails(formData.id,formData)
                 if(resp.status){
@@ -83,7 +87,7 @@ const Home = () => {
         }
         if (creatingNewUser){
             setShowLoaderOnupdate(true)
-            setUpdateDataError(false)
+            setUpdateDataError("")
             const uniqueId = uuidv4();
             const newUserData = {...formData,id:uniqueId.slice(1,3)}
 
@@ -104,6 +108,7 @@ const Home = () => {
                 setShowLoaderOnupdate(false)
                 setUpdateDataError(true)
                 setUpdateDataError(error.message)
+                
             }
         }
     }
@@ -115,6 +120,7 @@ const Home = () => {
             website:"",
             id:""})
         setShowPopup(false)
+        setUpdateDataError("")
     }
 
     const handelNewUser = () => {
