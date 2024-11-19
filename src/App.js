@@ -1,7 +1,19 @@
-export default function App() {
+import Home from "./components/Home/index";
+import Users from "./components/Users/index";
+import NotFound from "./components/NotFound";
+import { BrowserRouter as Router,Routes,Route} from "react-router-dom";
+
+
+function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/users" element={<Users/>}/>
+        <Route path="*" element={<NotFound/>}/>
+      </Routes>
+    </Router>
   )
 }
+
+export default App
