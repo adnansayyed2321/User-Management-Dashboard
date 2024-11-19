@@ -22,7 +22,7 @@ const Home = () => {
         website:"",
         id:""
     })
-    // console.log(usersData) 
+    // console.log(usersData)
 
     const handelDeleteUser = async(id) => {
         setDeletingId(id)
@@ -37,6 +37,7 @@ const Home = () => {
             setDeletingId(null)
             alert(error.message + " unable to delete user")
         }
+
     }
 
     const handelEditUser = (user) => {
@@ -64,26 +65,37 @@ const Home = () => {
     const onUpadteAndSaveChanges = async(e) =>{
         e.preventDefault()
         
-        
         if (!creatingNewUser){
             setShowLoaderOnupdate(true)
             setUpdateDataError("")
-            try{
-                const resp = await updateUserDetails(formData.id,formData)
-                if(resp.status){
-                const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
-                setShowLoaderOnupdate(false)
-                setUsersData(newList)
-                setShowPopup(false)
-                setFormData({name:"",
-                    email:"",
-                    companyName:"",
-                    website:"",
-                    id:""})}
-            }catch(error){
-                setShowLoaderOnupdate(false)
-                setUpdateDataError(error.message)
+            console.log(typeof(formData.id))
+
+            if (typeof(formData.id) === "number"){
+                try{
+                    const resp = await updateUserDetails(formData.id,formData)
+                    if(resp.status){
+                    const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
+                    setShowLoaderOnupdate(false)
+                    setUsersData(newList)
+                    setShowPopup(false)
+                    setFormData({name:"",
+                        email:"",
+                        companyName:"",
+                        website:"",
+                        id:""})}
+                }catch(error){
+                    setShowLoaderOnupdate(false)
+                    setUpdateDataError(error.message)
+                }
             }
+            if (typeof(formData.id) === "string"){
+                const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
+                setUsersData(newList)
+                setShowLoaderOnupdate(false)
+                setShowPopup(false)
+            }
+
+            
         }
         if (creatingNewUser){
             setShowLoaderOnupdate(true)

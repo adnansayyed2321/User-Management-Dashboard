@@ -11,9 +11,10 @@ const UserList = () => {
             try{
                 const response = await axios.get(USERS_API)
                 setUsersData(response.data)
+                // console.log(usersData)
             }catch(error){
                 setErrorMsg(error.message)
-                console.log(error.message)
+                // console.log(error.message)
             }
         }
 
