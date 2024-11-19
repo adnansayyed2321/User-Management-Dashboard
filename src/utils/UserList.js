@@ -4,6 +4,7 @@ import axios from "axios";
 
 const UserList = () => {
     const [usersData,setUsersData] = useState()
+    const [errorMsg,setErrorMsg] = useState("")
 
     useEffect(()=>{
         const fetchData =  async() =>{
@@ -11,6 +12,7 @@ const UserList = () => {
                 const response = await axios.get(USERS_API)
                 setUsersData(response.data)
             }catch(error){
+                setErrorMsg(error.message)
                 console.log(error.message)
             }
         }
@@ -18,7 +20,7 @@ const UserList = () => {
         fetchData()
     },[])
 
-    return usersData
+    return {usersData,errorMsg}
 }
 
 export default UserList
