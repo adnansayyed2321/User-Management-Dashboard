@@ -2,19 +2,30 @@ import { useState } from "react"
 import UserList from "../../utils/UserList"
 import Header from "../Header"
 import UserCard from "../UserCard"
+import { updateUserDetails } from "../../utils/updateUserDetails"
 
 const Home = () => {
     const [showPopup,setShowPopup] = useState(false)
-    const {usersData,errorMsg} = UserList()
+    const {usersData,errorMsg,setUsersData} = UserList()
     const [formData,setFormData] =useState({
         name:"",
         email:"",
-        company:"",
-        website:""
+        companyName:"",
+        website:"",
+        id:""
     })
     // console.log(usersData) 
 
     const handelEditUser = (user) => {
+        const {name,website,email,companyName,id} = user
+        console.log(user)
+        setFormData({
+            name: name,          
+            email: email,        
+            companyName: companyName,    
+            website: website ,
+            id:id  
+        });
         setShowPopup(true)
     }
 
@@ -23,6 +34,21 @@ const Home = () => {
             ...formData,
             [e.target.name]: e.target.value
         })
+    }
+
+    const onUpadteAndSaveChanges = async() =>{
+        const resp = await updateUserDetails(formData.id,formData)
+        if(resp.status){
+            const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
+            setUsersData(newList)
+            setShowPopup(false)
+            setFormData({name:"",
+                email:"",
+                companyName:"",
+                website:"",
+                id:""})
+        }
+        
     }
 
     if (errorMsg){
@@ -50,24 +76,24 @@ const Home = () => {
                     <form className="flex flex-col gap-3">
                         <div className="flex flex-col gap-1">
                             <label htmlFor="newName" className="font-semibold">Name</label>
-                            <input name="name" onChange={handelInputChange} id="newName" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Name"/>
+                            <input name="name" value={formData.name} onChange={handelInputChange} id="newName" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Name"/>
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="newEmail" className="font-semibold">Email</label>
-                            <input name="email" onChange={handelInputChange} id="newEmail" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Email"/>
+                            <input name="email" value={formData.email} onChange={handelInputChange} id="newEmail" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Email"/>
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="newCompany" className="font-semibold">Company</label>
-                            <input name="comapny" onChange={handelInputChange} id="newCompany" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Company"/>
+                            <input name="companyName" value={formData.companyName} onChange={handelInputChange} id="newCompany" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Company"/>
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="newWebsite" className="font-semibold">Website</label>
-                            <input name="website" onChange={handelInputChange} id="newWebsite" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Website"/>
+                            <input name="website" value={formData.website} onChange={handelInputChange} id="newWebsite" className="px-3 py-1 border-2 border-gray-400 rounded-lg" placeholder="Website"/>
                         </div>
                     </form>
                     <div className="flex justify-end gap-6">
                         <button className="font-semibold text-gray-600">Cancel</button>
-                        <button className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg ">Update User</button>
+                        <button onClick={onUpadteAndSaveChanges} className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg ">Update User</button>
                     </div>
                 </div>
 

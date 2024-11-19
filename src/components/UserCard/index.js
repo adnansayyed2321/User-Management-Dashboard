@@ -6,7 +6,15 @@ const UserCard = ({userDetails,handelEditUser}) => {
     // console.log(userDetails)
    
     const handelEditInCard = () =>{
-        handelEditUser(userDetails)
+        const userInfo = {
+            name,
+            id,
+            email,
+            companyName:company.name,
+            website
+        }
+
+        handelEditUser(userInfo)
     }
 
     return (

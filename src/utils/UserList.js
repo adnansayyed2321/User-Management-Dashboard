@@ -20,7 +20,7 @@ const UserList = () => {
         fetchData()
     },[])
 
-    return {usersData,errorMsg}
+    return {usersData,errorMsg,setUsersData}
 }
 
 export default UserList
