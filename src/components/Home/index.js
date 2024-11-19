@@ -4,12 +4,14 @@ import Header from "../Header"
 import UserCard from "../UserCard"
 import { updateUserDetails } from "../../utils/updateUserDetails"
 import Shimmer from "../Shimmer"
+import { deleteUserDetails } from "../../utils/deleteUserDetails"
 
 const Home = () => {
     const [showPopup,setShowPopup] = useState(false)
     const {usersData,errorMsg,setUsersData} = UserList()
     const [udpateDataError,setUpdateDataError] = useState("")
     const [showLoaderOnUpdate,setShowLoaderOnupdate] = useState(false)
+    const [deletingId,setDeletingId] = useState(null)
     const [formData,setFormData] =useState({
         name:"",
         email:"",
@@ -18,6 +20,20 @@ const Home = () => {
         id:""
     })
     // console.log(usersData) 
+
+    const handelDeleteUser = async(id) => {
+        setDeletingId(id)
+        try{
+            const resp = await deleteUserDetails(id)
+            if(resp.status){
+                setDeletingId(null)
+                const newData = usersData.filter((e)=> id !== e.id)
+                setUsersData(newData)
+            }
+        }catch(error){
+            alert(error.message + " unable to delete user")
+        }
+    }
 
     const handelEditUser = (user) => {
         const {name,website,email,companyName,id} = user
@@ -72,7 +88,7 @@ const Home = () => {
 
     if (errorMsg){
         return(
-            <div>
+            <div className="bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 min-h-screen">
                 <Header/>
                 <p className="md:w-3/4 w-4/5 mx-auto text-red-600 font-semibold text-center p-6">{errorMsg}</p>
             </div>
@@ -80,14 +96,26 @@ const Home = () => {
     }
 
     return(
-        <div className="bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100">
+        <div className="bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 min-h-screen">
             <Header/>
             <div className="md:w-3/4 w-11/12 mx-auto flex flex-col pb-6">
                 <button className="text-base md:text-lg self-end font-semibold flex items-center px-6 md:py-2 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full ">Add New User</button>
                 
-                {usersData ? <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4">
-                    {(usersData.map((each)=>(<UserCard key={each.id} handelEditUser={handelEditUser} userDetails = {each}/>)))}
-                </div>: <Shimmer/>}
+                {usersData ? (
+                    usersData.length === 0 ? 
+                        <p className="text-blue-600 font-semibold text-center">Your user list is empty. Click 'Add New User' to add a user.</p> :
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4">
+                        {(usersData.map((each)=>(
+                            <UserCard 
+                            key={each.id} 
+                            showLoaderOfDelete={deletingId === each.id} 
+                            handelDeleteUser={handelDeleteUser} 
+                            handelEditUser={handelEditUser} 
+                            userDetails = {each}/>)))}
+                    </div>
+                        )
+                    : 
+                <Shimmer/>}
             </div>
             { showPopup && 
                 <div className="fixed inset-0 bg-black bg-opacity-50  flex items-center justify-center ">

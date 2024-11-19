@@ -1,7 +1,7 @@
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const UserCard = ({userDetails,handelEditUser}) => {
+const UserCard = ({userDetails,handelEditUser,handelDeleteUser,showLoaderOfDelete}) => {
     const {name,id,email,company,website,} = userDetails
     // console.log(userDetails)
    
@@ -17,6 +17,11 @@ const UserCard = ({userDetails,handelEditUser}) => {
         handelEditUser(userInfo)
     }
 
+    const handelDeleteInCard = () => {
+        // console.log(id)
+        handelDeleteUser(id)
+    }
+
     return (
         <div className="bg-white rounded-2xl shadow-xl p-8 hover:scale-105 hover:shadow-2xl flex flex-col gap-4">
             <div>
@@ -30,8 +35,9 @@ const UserCard = ({userDetails,handelEditUser}) => {
             </div>
             <div className="flex items-center gap-5 justify-end">
                 <button className="text-purple-600 text-xl md:text-xl" onClick={handelEditInCard}> <FaRegEdit /></button>
-                <button className="text-pink-600 text-xl md:text-2xl"><MdDelete /></button>
+                <button className="text-pink-600 text-xl md:text-2xl" onClick={handelDeleteInCard}><MdDelete /></button>
             </div>
+            {showLoaderOfDelete && <p className="font-semibold text-blue-600 text-sm md:text-base">Please Wait Deleting User</p>}
         </div>
     )
 }
