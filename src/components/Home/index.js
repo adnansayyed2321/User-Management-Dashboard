@@ -90,7 +90,8 @@ const Home = () => {
                 }
             }
             if (typeof(formData.id) === "string"){
-                const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
+                const formatformData = {...formData,company:{name:formData.companyName}}
+                const newList = usersData.map((e)=> formatformData.id === e.id ? {...e,...formatformData}:e)
                 setUsersData(newList)
                 setShowLoaderOnupdate(false)
                 setShowPopup(false)
