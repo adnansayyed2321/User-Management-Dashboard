@@ -74,15 +74,16 @@ const Home = () => {
                 try{
                     const resp = await updateUserDetails(formData.id,formData)
                     if(resp.status){
-                    const newList = usersData.map((e)=> formData.id === e.id ? {...e,...formData}:e)
-                    setShowLoaderOnupdate(false)
-                    setUsersData(newList)
-                    setShowPopup(false)
-                    setFormData({name:"",
-                        email:"",
-                        companyName:"",
-                        website:"",
-                        id:""})}
+                        const formatformData = {...formData,company:{name:formData.companyName}}
+                        const newList = usersData.map((e)=> formatformData.id === e.id ? {...e,...formatformData}:e)
+                        setShowLoaderOnupdate(false)
+                        setUsersData(newList)
+                        setShowPopup(false)
+                        setFormData({name:"",
+                            email:"",
+                            companyName:"",
+                            website:"",
+                            id:""})}
                 }catch(error){
                     setShowLoaderOnupdate(false)
                     setUpdateDataError(error.message)
