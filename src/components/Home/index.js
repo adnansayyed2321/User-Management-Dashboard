@@ -176,7 +176,7 @@ const Home = () => {
             { showPopup && 
                 <div className="fixed inset-0 bg-black bg-opacity-50  flex items-center justify-center ">
                 <div className="bg-white md:w-1/3 p-8 rounded-lg flex flex-col gap-5"> 
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Edit User</h1>
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{creatingNewUser ? "Add New User" : "Edit User"}</h1>
                     <form className="flex flex-col gap-3" onSubmit={onUpadteAndSaveChanges}>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="newName" className="font-semibold">Name</label>
